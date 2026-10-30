@@ -12,13 +12,13 @@ export function TaskForm({type, placeholder, onAjouter}) {
         setNouvelleTache("")
     }
     return (
-        <form onSubmit={gererSoumission}>
+        <form onSubmit={gererSoumission} className="task-form">
             <input 
                 type={type}
                 placeholder={placeholder}
                 value={nouvelleTache} 
                 onChange={(e) => setNouvelleTache(e.target.value)}
-        /> <br/>
+        />
         <button type="submit">
             Ajouter
         </button>

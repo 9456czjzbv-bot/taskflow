@@ -1,15 +1,24 @@
-export function TaskFilters ({filtre, onChangeFiltre}) {
-    return <>
-        <div>
-            <button onClick={() => onChangeFiltre("Toutes")}>
+export function TaskFilters ({filtre, onChangerFiltre}) {
+    return (
+        <div className="task-filters">
+            <button
+            className={filtre === "Toutes" ? "active" : ""}
+            onClick={() => onChangerFiltre("Toutes")}
+            >
                 Toutes
             </button >
-            <button onClick={() => onChangeFiltre("A faire")}>
-                A faire 
+            <button 
+            className={filtre === "À faire" ? "active" : ""}
+            onClick={() => onChangerFiltre("À faire")}
+            >
+                À faire
             </button>
-            <button onClick={() => onChangeFiltre("Terminées")}>
+            <button 
+            className={filtre === "Terminées" ? "active" : ""}
+            onClick={() => onChangerFiltre("Terminées")}
+            >
                 Terminées
             </button>
         </div>
-    </>
+        )
 }

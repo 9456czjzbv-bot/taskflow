@@ -1,10 +1,8 @@
-function Header({title}) {
+export function Header() {
   return (
-    <header>
+    <header className="app-header">
       <h1>TaskFlow</h1>
-      <p>Organise tes tâches simplement</p>
+      <p>Organise tes tâches, maîtrise ton temps.</p>
     </header>
   )
 }
-
-export default Header

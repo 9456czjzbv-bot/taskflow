@@ -1,17 +1,21 @@
 export function TaskItem({titre, onSupprimer, onTerminer, terminee}) {
     return (
-        <div>
-            <span>{titre}</span>
+        <div className={`task-item ${terminee ? "completed" : ""}`}>
+            <span className="task-title">{titre}</span>
+            <div className="task-actions">
             <button 
-            onClick={onTerminer}
+                className="complete-btn" 
+                onClick={onTerminer}
             >
                 {terminee ? "Annuler" : "Terminer"}
             </button>
-            <button 
+            <button
+                className="delete-btn" 
                 onClick={onSupprimer}
             > 
                 Supprimer
             </button>
+            </div>
         </div>
     )
 }
