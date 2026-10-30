@@ -51,9 +51,23 @@ function App() {
 
     return true
   })
+  const totalTaches = taches.length
+
+  const tachesterminees = taches.filter(
+    (tache) => tache.terminee
+  ).length
+  const tachesAFaire = taches.filter(
+    (tache) => !tache.terminee
+  ).length
+
   return <>
     <div>
       <Header />
+      <div>
+        <p>Total : {totalTaches}</p>
+        <p>A faire : {tachesAFaire}</p>
+        <p>Terminées : {tachesterminees}</p>
+      </div>
       <TaskForm onAjouter={ajouterTache} type = "text"  placeholder = "Quelle tache veux-tu réaliser"/>
       <TaskFilters 
         filtre={filtre} 
