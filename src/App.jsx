@@ -60,7 +60,7 @@ function App() {
         onChangeFiltre={setFiltre} 
       />
       <TaskList 
-        taches={taches}
+        taches={tachesFiltrees}
         onSupprimer={supprimerTache}
         onTerminer={terminerTache}
       />

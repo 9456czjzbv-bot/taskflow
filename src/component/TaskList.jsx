@@ -1,6 +1,6 @@
 import { TaskItem } from "./TaskItem";
 
-export function TaskList ({taches, onSupprimer, onTerminer}) {
+export function TaskList ({taches, onSupprimer, onTerminer,}) {
     return <>
         <div>
             {taches.map((tache) => (
