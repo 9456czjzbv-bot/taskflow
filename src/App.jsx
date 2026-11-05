@@ -1,16 +1,40 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import "./App.css"
 import { Header } from "./component/headers"
 import { TaskForm } from "./component/TaskForm"
 import { TaskList } from "./component/TaskList"
 import { TaskFilters } from "./component/TaskFilters"
 import { TaskStats } from "./component/TaskStats"
+function estUneTacheValide () {
+  return (
+    tache !== null && 
+    typeof tache === "objet" &&
+    !Array.isArray(tache) &&
+    Number.isInteger(tache.id) &&
+    tache.id > 0 &&
+    typeof tache.titre === "string" &&
+    tache.titre.trim().length > 0 &&
+    typeof tache.terminee === "boolean"
+  )
+}
 function App() {
-  const [taches, setTaches] = useState([
-    {id: 1, titre: "Apprendre React", terminee: false},
-    {id: 2, titre: "comprendre les composants", terminee: false},
-    {id: 3, titre: "Construire une API", terminee: false}
-  ])
+  const [taches, setTaches] = useState(() => {
+  try {
+   const tachesSauvegardees = localStorage.getItem("taches")
+    if (tachesSauvegardees) {
+      const donnees = JSON.parse(tachesSauvegardees)
+      if (Array.isArray(donnees)) {
+        return donnees.filter(estUneTacheValide)
+      }
+    }
+  } catch (e) {
+    console.log("Erreur de recuperation :", e)
+    return []
+  }
+})
+  useEffect(() => {
+    localStorage.setItem("taches", JSON.stringify(taches))
+  }, [taches])
   const [filtre, setFiltre] = useState("Toutes")
   const ajouterTache = (titre) => {
     const existeDeja = taches.some(

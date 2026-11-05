@@ -65,6 +65,9 @@ body {
   transition:
     background-color 0.2s ease,
     transform 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 .task-form button:hover {
   background-color: #1d4ed8;
@@ -145,6 +148,13 @@ body {
   margin-bottom: 12px;
   border: 1px solid #e2e8f0;
   border-radius: 10px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.task-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
 .task-title {
@@ -237,4 +247,8 @@ body {
   border: 1px dashed #cbd5e1;
   border-radius: 10px;
   font-size: 15px;
+}
+.task-item.completed {
+  background-color: #f8fafc;
+  border-color: #e2e8f0;
 }
