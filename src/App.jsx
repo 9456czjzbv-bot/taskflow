@@ -5,9 +5,9 @@ import { TaskForm } from "./component/TaskForm"
 import { TaskList } from "./component/TaskList"
 import { TaskFilters } from "./component/TaskFilters"
 import { TaskStats } from "./component/TaskStats"
-function estUneTacheValide () {
+function estUneTacheValide() {
   return (
-    tache !== null && 
+    tache !== null &&
     typeof tache === "objet" &&
     !Array.isArray(tache) &&
     Number.isInteger(tache.id) &&
@@ -19,19 +19,19 @@ function estUneTacheValide () {
 }
 function App() {
   const [taches, setTaches] = useState(() => {
-  try {
-   const tachesSauvegardees = localStorage.getItem("taches")
-    if (tachesSauvegardees) {
-      const donnees = JSON.parse(tachesSauvegardees)
-      if (Array.isArray(donnees)) {
-        return donnees.filter(estUneTacheValide)
+    try {
+      const tachesSauvegardees = localStorage.getItem("taches")
+      if (tachesSauvegardees) {
+        const donnees = JSON.parse(tachesSauvegardees)
+        if (Array.isArray(donnees)) {
+          return donnees.filter(estUneTacheValide)
+        }
       }
+    } catch (e) {
+      console.log("Erreur de recuperation :", e)
+      return []
     }
-  } catch (e) {
-    console.log("Erreur de recuperation :", e)
-    return []
-  }
-})
+  })
   useEffect(() => {
     localStorage.setItem("taches", JSON.stringify(taches))
   }, [taches])
@@ -60,14 +60,14 @@ function App() {
   }
   const terminerTache = (id) => {
     setTaches(
-      taches.map((tache) => 
-      tache.id === id
-      ? {...tache, terminee: !tache.terminee}
-      : tache
+      taches.map((tache) =>
+        tache.id === id
+          ? { ...tache, terminee: !tache.terminee }
+          : tache
       )
     )
   }
-  const tachesFiltrees = taches.filter((tache) =>  {
+  const tachesFiltrees = taches.filter((tache) => {
     if (filtre === "À faire") {
       return !tache.terminee
     }
@@ -89,27 +89,27 @@ function App() {
   return (
     <div className="app-container">
       <Header />
-      <TaskStats 
+      <TaskStats
         total={totalTaches}
         aFaire={tachesAFaire}
         terminees={tachesterminees}
       />
-      <TaskForm 
-        onAjouter={ajouterTache} 
-        type = "text"  
-        placeholder = "Quelle tache veux-tu réaliser"
+      <TaskForm
+        onAjouter={ajouterTache}
+        type="text"
+        placeholder="Quelle tache veux-tu réaliser"
       />
-      <TaskFilters 
-        filtre={filtre} 
-        onChangerFiltre={setFiltre} 
+      <TaskFilters
+        filtre={filtre}
+        onChangerFiltre={setFiltre}
       />
-      <TaskList 
+      <TaskList
         taches={tachesFiltrees}
         onSupprimer={supprimerTache}
         onTerminer={terminerTache}
       />
     </div>
-    )
+  )
 }
 
 export default App
