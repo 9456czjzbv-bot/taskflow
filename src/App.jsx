@@ -5,6 +5,7 @@ import { TaskForm } from "./component/TaskForm"
 import { TaskList } from "./component/TaskList"
 import { TaskFilters } from "./component/TaskFilters"
 import { TaskStats } from "./component/TaskStats"
+import { verifierServeur } from "./services/api"
 function estUneTacheValide() {
   return (
     tache !== null &&
@@ -35,6 +36,16 @@ function App() {
   useEffect(() => {
     localStorage.setItem("taches", JSON.stringify(taches))
   }, [taches])
+
+  useEffect(() => {
+    verifierServeur()
+      .then((donnees) => {
+        console.log("Réponse du backend :", donnees)
+      })
+      .catch((erreur) => {
+        console.log("Erreur de connexion :", erreur)
+      })
+  }, [])
   const [filtre, setFiltre] = useState("Toutes")
   const ajouterTache = (titre) => {
     const existeDeja = taches.some(
