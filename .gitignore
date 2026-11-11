@@ -22,3 +22,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Dépendances
+node_modules/
+
+# Fichiers confidentiels
+.env
+.env.*
+backend/.env
+
+# Fichiers générés
+dist/
+build/
+
+# Logs
+npm-debug.log*

@@ -5,11 +5,11 @@ import { TaskForm } from "./component/TaskForm"
 import { TaskList } from "./component/TaskList"
 import { TaskFilters } from "./component/TaskFilters"
 import { TaskStats } from "./component/TaskStats"
-import { verifierServeur } from "./services/api"
-function estUneTacheValide() {
+import { verifierServeur, ajouterTache as envoyerTacheAPI, recupererTaches, supprimerTacheAPI } from "./services/api"
+function estUneTacheValide(tache) {
   return (
     tache !== null &&
-    typeof tache === "objet" &&
+    typeof tache === "object" &&
     !Array.isArray(tache) &&
     Number.isInteger(tache.id) &&
     tache.id > 0 &&
@@ -28,6 +28,7 @@ function App() {
           return donnees.filter(estUneTacheValide)
         }
       }
+      return []
     } catch (e) {
       console.log("Erreur de recuperation :", e)
       return []
@@ -37,17 +38,20 @@ function App() {
     localStorage.setItem("taches", JSON.stringify(taches))
   }, [taches])
 
+
   useEffect(() => {
-    verifierServeur()
+    recupererTaches()
       .then((donnees) => {
-        console.log("Réponse du backend :", donnees)
+        setTaches(donnees);
+        console.log("Tâches récupérées depuis MySQL :", donnees);
       })
       .catch((erreur) => {
-        console.log("Erreur de connexion :", erreur)
-      })
-  }, [])
+        console.error("Erreur de récupération :", erreur);
+      });
+  }, []);
+
   const [filtre, setFiltre] = useState("Toutes")
-  const ajouterTache = (titre) => {
+  const ajouterTache = async (titre) => {
     const existeDeja = taches.some(
       (tache) => tache.titre.toLowerCase() === titre.toLowerCase()
     )
@@ -56,19 +60,33 @@ function App() {
       alert("cette tache existe deja")
       return
     }
+    try {
+      const nouvelleTache = await envoyerTacheAPI(titre)
 
-    const nouvelleTache = {
-      id: Date.now(),
-      titre: titre,
-      terminee: false
+      setTaches((anciennesTaches) => [
+        ...anciennesTaches,
+        nouvelleTache
+      ])
+    } catch (e) {
+      console.error("Erreur lors de l'ajout : ", e)
+      alert("Impossible d'enregistrer la tache.")
     }
-    setTaches([...taches, nouvelleTache])
   }
-  const supprimerTache = (id) => {
-    setTaches(
-      taches.filter((tache) => tache.id !== id)
-    )
-  }
+
+  const supprimerTache = async (id) => {
+    try {
+      await supprimerTacheAPI(id);
+
+      setTaches((anciennesTaches) =>
+        anciennesTaches.filter((tache) => tache.id !== id)
+      );
+
+    } catch (erreur) {
+      console.error("Erreur lors de la suppression :", erreur);
+      alert("Impossible de supprimer la tâche.");
+    }
+  };
+
   const terminerTache = (id) => {
     setTaches(
       taches.map((tache) =>
