@@ -45,3 +45,19 @@ export async function supprimerTacheAPI(id) {
 
     return await reponse.json();
 }
+
+export async function modifierStatutTache(id, terminee) {
+    const reponse = await fetch(`http://localhost:5000/api/taches/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ terminee })
+    });
+
+    if (!reponse.ok) {
+        throw new Error("Impossible de modifier le statut de la tâche.");
+    }
+
+    return await reponse.json();
+}

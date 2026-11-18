@@ -88,6 +88,43 @@ app.delete("/api/taches/:id", async (req, res) => {
 });
 
 
+app.patch("/api/taches/:id", async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const { terminee } = req.body;
+
+        if (!Number.isInteger(id) || id <= 0 || typeof terminee !== "boolean") {
+            return res.status(400).json({
+                message: "Données invalides."
+            });
+        }
+
+        const [resultat] = await db.query(
+            "UPDATE taches SET terminee = ? WHERE id = ?",
+            [terminee, id]
+        );
+
+        if (resultat.affectedRows === 0) {
+            return res.status(404).json({
+                message: "Tâche introuvable."
+            });
+        }
+
+        res.json({
+            id,
+            terminee,
+            message: "Statut mis à jour avec succès."
+        });
+
+    } catch (erreur) {
+        console.error(erreur);
+        res.status(500).json({
+            message: "Erreur lors de la mise à jour."
+        });
+    }
+});
+
+
 db.getConnection()
     .then((connection) => {
         console.log("Connexion à MySQL réussie !");

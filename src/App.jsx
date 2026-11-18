@@ -5,7 +5,7 @@ import { TaskForm } from "./component/TaskForm"
 import { TaskList } from "./component/TaskList"
 import { TaskFilters } from "./component/TaskFilters"
 import { TaskStats } from "./component/TaskStats"
-import { verifierServeur, ajouterTache as envoyerTacheAPI, recupererTaches, supprimerTacheAPI } from "./services/api"
+import { verifierServeur, ajouterTache as envoyerTacheAPI, recupererTaches, supprimerTacheAPI, modifierStatutTache } from "./services/api"
 function estUneTacheValide(tache) {
   return (
     tache !== null &&
@@ -87,15 +87,28 @@ function App() {
     }
   };
 
-  const terminerTache = (id) => {
-    setTaches(
-      taches.map((tache) =>
-        tache.id === id
-          ? { ...tache, terminee: !tache.terminee }
-          : tache
-      )
-    )
-  }
+  const terminerTache = async (id) => {
+    const tache = taches.find((tache) => tache.id === id);
+
+    if (!tache) return;
+
+    const nouveauStatut = !Boolean(tache.terminee);
+
+    try {
+      await modifierStatutTache(id, nouveauStatut);
+
+      setTaches((anciennesTaches) =>
+        anciennesTaches.map((tache) =>
+          tache.id === id
+            ? { ...tache, terminee: nouveauStatut }
+            : tache
+        )
+      );
+    } catch (erreur) {
+      console.error("Erreur de modification :", erreur);
+      alert("Impossible de modifier le statut de la tâche.");
+    }
+  };
   const tachesFiltrees = taches.filter((tache) => {
     if (filtre === "À faire") {
       return !tache.terminee
