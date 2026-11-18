@@ -6,7 +6,7 @@ import { TaskList } from "./component/TaskList"
 import { TaskFilters } from "./component/TaskFilters"
 import { TaskStats } from "./component/TaskStats"
 import { verifierServeur, ajouterTache as envoyerTacheAPI, recupererTaches, supprimerTacheAPI, modifierStatutTache } from "./services/api"
-function estUneTacheValide(tache) {
+/* function estUneTacheValide(tache) {
   return (
     tache !== null &&
     typeof tache === "object" &&
@@ -17,27 +17,9 @@ function estUneTacheValide(tache) {
     tache.titre.trim().length > 0 &&
     typeof tache.terminee === "boolean"
   )
-}
+} */
 function App() {
-  const [taches, setTaches] = useState(() => {
-    try {
-      const tachesSauvegardees = localStorage.getItem("taches")
-      if (tachesSauvegardees) {
-        const donnees = JSON.parse(tachesSauvegardees)
-        if (Array.isArray(donnees)) {
-          return donnees.filter(estUneTacheValide)
-        }
-      }
-      return []
-    } catch (e) {
-      console.log("Erreur de recuperation :", e)
-      return []
-    }
-  })
-  useEffect(() => {
-    localStorage.setItem("taches", JSON.stringify(taches))
-  }, [taches])
-
+  const [taches, setTaches] = useState([])
 
   useEffect(() => {
     recupererTaches()
